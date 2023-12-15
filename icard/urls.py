@@ -14,8 +14,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.urls import re_path
+from django.views.static import serve
+
+
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -53,4 +58,9 @@ urlpatterns = [
     path('api/', include(router_table.urls)),
     path('api/', include(router_orders.urls)),
     path('api/', include(router_payments.urls))
+]
+urlpatterns += [
+	re_path(r'^uploads/(?P<path>.*)$', serve, {
+		'document_root': settings.MEDIA_ROOT,
+	})
 ]
